@@ -1,0 +1,1500 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cours Complet + Activités</title>
+    <!-- Import de polices modernes pour les activités -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        /* 
+         * =========================================
+         * 1. DESIGN SYSTEM & CSS DU COURS PRINCIPAL
+         * =========================================
+         */
+        :root {
+            /* Variables du Cours */
+            --primary-color: #2c3e50;
+            --primary-light: #34495e;
+            --accent-color: #e67e22;
+            --accent-hover: #d35400;
+            --bg-body: #f8f9fa;
+            --bg-card: #ffffff;
+            --text-main: #333333;
+            --text-light: #666666;
+            --success-color: #27ae60;
+            --danger-color: #c0392b;
+            --shadow-sm: 0 2px 4px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+            --radius: 8px;
+            --font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            --sidebar-width: 280px;
+
+            /* Variables communes des Activités (Post-its, etc.) */
+            --act-bg-color: #f3f4f6;
+            --act-text-color: #1f2937;
+            --act-post-it-bg: #fef3c7;
+            --act-post-it-shadow: rgba(0,0,0,0.1);
+            --act-obj-color: #3b82f6;
+            --act-pt-color: #10b981;
+            --act-header-bg: #111827;
+            --act-header-text: #ffffff;
+            --act-input-bg: #ffffff;
+            --act-record-color: #dc2626;
+        }
+
+        /* RESET & BASE */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            font-family: var(--font-family);
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            line-height: 1.6;
+            scroll-behavior: smooth;
+            display: block; /* Flex retiré pour l'interface globale */
+            width: 100%;
+        }
+
+        /* LAYOUT PRINCIPAL DU COURS */
+        .app-container { width: 100%; display: block; }
+        .main-content {
+            margin: 0 auto;
+            padding: 3rem 4rem;
+            max-width: 1000px;
+        }
+
+        /* TYPOGRAPHIE DU COURS */
+        h1 { font-size: 2.5rem; color: var(--primary-color); margin-bottom: 1rem; line-height: 1.2; text-align: center; font-family: var(--font-family); }
+        h2 { font-size: 1.8rem; color: var(--primary-light); margin: 3rem 0 1.5rem; padding-bottom: 0.5rem; border-bottom: 2px solid #eee; display: flex; align-items: center; gap: 10px; }
+        h3 { font-size: 1.3rem; color: var(--text-main); margin: 1.5rem 0 1rem; font-weight: 600; }
+        p { margin-bottom: 1rem; color: var(--text-light); }
+        ul { margin-bottom: 1rem; padding-left: 1.5rem; color: var(--text-light); }
+        li { margin-bottom: 0.5rem; }
+
+        /* ELEMENTS DU COURS */
+        .hero { background: #ffffff; border: 2px solid var(--accent-color); color: var(--primary-color); padding: 3rem; border-radius: var(--radius); margin-bottom: 3rem; box-shadow: var(--shadow-md); text-align: center; }
+        .objectives-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-bottom: 3rem; }
+        .obj-card { background: var(--bg-body); padding: 1.5rem; border-radius: var(--radius); box-shadow: var(--shadow-sm); border-left: 4px solid var(--accent-color); transition: transform 0.2s; }
+        .obj-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+        .obj-card strong { display: block; color: var(--primary-color); margin-bottom: 0.5rem; }
+        .comparison-table { width: 100%; border-collapse: collapse; background: var(--bg-card); border-radius: var(--radius); overflow: hidden; margin: 2rem 0; }
+        .comparison-table th, .comparison-table td { padding: 1rem; text-align: left; border-bottom: 1px solid #eee; }
+        .comparison-table th { background: var(--primary-color); color: white; }
+        .comparison-table tr:last-child td { border-bottom: none; }
+        
+        .tabs-container { background: var(--bg-card); border-radius: var(--radius); box-shadow: var(--shadow-sm); overflow: hidden; margin: 2rem 0; }
+        .tabs-header { display: flex; background: #eee; border-bottom: 1px solid #ddd; }
+        .tab-btn { flex: 1; padding: 1rem; border: none; background: none; cursor: pointer; font-weight: 600; color: var(--text-light); transition: background 0.3s, color 0.3s; }
+        .tab-btn.active { background: white; color: var(--accent-color); border-top: 3px solid var(--accent-color); }
+        .tab-content { padding: 2rem; display: none; animation: fadeIn 0.4s ease; }
+        .tab-content.active { display: block; }
+        .badges-list { display: flex; flex-wrap: wrap; gap: 1rem; }
+        .badge { background: #fff0f0; color: var(--danger-color); padding: 0.5rem 1rem; border-radius: 50px; font-size: 0.9rem; border: 1px solid #ffdcdc; display: flex; align-items: center; gap: 0.5rem; }
+        .step-list { counter-reset: step; }
+        .step-item { position: relative; padding-left: 3rem; margin-bottom: 2rem; }
+        .step-item::before { counter-increment: step; content: counter(step); position: absolute; left: 0; top: 0; width: 2rem; height: 2rem; background: var(--accent-color); color: white; border-radius: 50%; text-align: center; line-height: 2rem; font-weight: bold; }
+        #conclusion > div { background: white; color: var(--primary-color); border: 2px solid var(--primary-color); padding: 2rem; border-radius: var(--radius); text-align: center; box-shadow: none; }
+        #conclusion h2 { border-bottom: none; color: var(--primary-color); justify-content: center; }
+        #conclusion p { color: var(--text-light); }
+
+        /* FOOTER DU COURS */
+        .footer-actions {
+            position: fixed;
+            bottom: 0;
+            right: 0;
+            width: 100%;
+            background: white;
+            padding: 1rem 4rem;
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.05);
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            z-index: 90;
+        }
+        .btn { padding: 0.8rem 1.5rem; border-radius: var(--radius); border: none; cursor: pointer; font-weight: 600; font-size: 1rem; transition: all 0.2s; display: inline-flex; align-items: center; gap: 0.5rem; }
+        .btn-secondary { background: white; border: 2px solid var(--primary-color); color: var(--primary-color); }
+        .btn-secondary:hover { background: #f0f4f8; }
+        .btn-primary { background: var(--accent-color); color: white; box-shadow: 0 4px 10px rgba(230, 126, 34, 0.3); }
+        .btn-primary:hover { background: var(--accent-hover); transform: translateY(-2px); }
+        
+        /* TOAST DU COURS */
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--primary-color);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-md);
+            transform: translateY(-100px);
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+        .toast.show { transform: translateY(0); opacity: 1; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* 
+         * =========================================
+         * 2. CSS DES ACTIVITÉS (Fusionné & Scoped)
+         * =========================================
+         */
+        
+        /* --- COMMUN AUX ACTIVITÉS 1, 2, 3 --- */
+        #exercises-interface {
+            display: none; /* Caché par défaut */
+            padding: 2rem;
+            min-height: 100vh;
+            background-color: var(--act-bg-color);
+            color: var(--act-text-color);
+            font-family: 'Open Sans', sans-serif;
+        }
+        
+        .ex-back-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            color: var(--text-light);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-bottom: 2rem;
+            font-weight: 600;
+        }
+        .ex-back-btn:hover { color: var(--primary-color); text-decoration: underline; }
+
+        /* Navigation des 4 activités */
+        .ex-nav {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        .ex-nav button {
+            padding: 0.6rem 1.2rem;
+            background: white;
+            border: 1px solid #ccc;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            font-family: 'Montserrat', sans-serif;
+            transition: all 0.2s;
+        }
+        .ex-nav button.active {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+        .ex-nav button:hover:not(.active) { background: #eee; }
+
+        /* Conteneurs individuels pour isoler les activités */
+        .activity-wrapper { display: none; animation: fadeIn 0.3s ease; }
+        .activity-wrapper.active { display: block; }
+
+        /* Styles communs Post-it */
+        .post-it {
+            background-color: var(--act-post-it-bg);
+            padding: 1.5rem;
+            border-radius: 2px;
+            box-shadow: 2px 4px 6px var(--act-post-it-shadow);
+            position: relative;
+            transform: rotate(var(--rotation, 0deg)); 
+            min-height: 200px;
+        }
+        .post-it::after {
+            content: ''; position: absolute; top: -6px; left: 50%; transform: translateX(-50%);
+            width: 14px; height: 14px; border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, #ff6b6b, #c0392b);
+            box-shadow: 1px 2px 4px rgba(0,0,0,0.3); z-index: 20;
+        }
+        .post-it-title {
+            font-size: 1.1rem; font-weight: 700; color: #78350f; margin-bottom: 1rem;
+            padding-bottom: 0.5rem; border-bottom: 2px dashed rgba(120, 53, 15, 0.2);
+            background: rgba(255,255,255,0.3); padding: 0.5rem; border-radius: 4px;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        /* Boutons Communs */
+        .btn-info { background-color: #6b7280; color: white; font-family: 'Montserrat', sans-serif; border: none; padding: 0.6rem 1.2rem; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 0.9rem; transition: all 0.2s; }
+        .btn-reset { background-color: var(--danger-color); color: white; font-family: 'Montserrat', sans-serif; border: none; padding: 0.6rem 1.2rem; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 0.9rem; transition: all 0.2s; }
+        .btn-check { background-color: var(--success-color); color: white; font-family: 'Montserrat', sans-serif; border: none; padding: 0.6rem 1.2rem; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 0.9rem; transition: all 0.2s; }
+        .btn-pdf { background-color: #8b5cf6; color: white; font-family: 'Montserrat', sans-serif; border: none; padding: 0.6rem 1.2rem; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 0.9rem; transition: all 0.2s; }
+        .btn-generate { background-color: #f59e0b; color: white; font-family: 'Montserrat', sans-serif; border: none; padding: 0.6rem 1.2rem; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 0.9rem; transition: all 0.2s; }
+        .btn-clear { background-color: #fee2e2; color: var(--danger-color); padding: 0.4rem 0.8rem; font-size: 0.8rem; border: 1px solid #fecaca; border-radius: 6px; cursor: pointer; font-family: 'Montserrat', sans-serif; }
+        
+        /* Toast Activités */
+        #act-toast { visibility: hidden; min-width: 300px; background-color: #374151; color: #fff; text-align: center; border-radius: 8px; padding: 16px; position: fixed; z-index: 200; bottom: 30px; left: 50%; transform: translateX(-50%); font-family: 'Montserrat', sans-serif; font-weight: 600; }
+        #act-toast.show { visibility: visible; animation: fadein 0.5s, fadeout 0.5s 2.5s; }
+        @keyframes fadein { from {bottom: 0; opacity: 0;} to {bottom: 30px; opacity: 1;} }
+        @keyframes fadeout { from {bottom: 30px; opacity: 1;} to {bottom: 0; opacity: 0;} }
+
+        /* --- ACTIVITÉ 1 (Structure) --- */
+        .act1-container { max-width: 1600px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1.5fr 1fr; gap: 2rem; align-items: start; }
+        .act1-pool { background: white; padding: 1.5rem; border-radius: 12px; box-shadow: var(--act-post-it-shadow); border: 1px solid #e5e7eb; min-height: 400px; display: flex; flex-direction: column; }
+        .act1-header { margin-bottom: 1rem; font-size: 1.1rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; padding-bottom: 0.5rem; border-bottom: 2px solid transparent; font-family: 'Montserrat', sans-serif; }
+        .act1-board { display: flex; flex-direction: column; gap: 2rem; }
+        .act1-drop { flex: 1; background-color: #f9fafb; border-radius: 8px; border: 2px dashed #e5e7eb; padding: 0.5rem; display: flex; flex-direction: column; gap: 0.6rem; transition: background-color 0.2s, border-color 0.2s; min-height: 120px; }
+        .act1-drop.drag-over { background-color: rgba(255, 255, 255, 0.9); border-color: var(--act-pt-color); box-shadow: inset 0 0 0 2px rgba(16, 185, 129, 0.2); }
+        .act1-card { padding: 0.8rem 1rem; border-radius: 6px; color: #1f2937; font-size: 0.95rem; cursor: grab; box-shadow: 0 1px 3px rgba(0,0,0,0.1); border: 1px solid rgba(0,0,0,0.05); user-select: none; transition: all 0.2s; position: relative; }
+        .act1-card:active { cursor: grabbing; }
+        .act1-card[data-type="objective"] { background-color: #eff6ff; border-left: 4px solid var(--act-obj-color); }
+        .act1-card[data-type="point"] { background-color: #ecfdf5; border-left: 4px solid var(--act-pt-color); }
+        .act1-card::before { content: attr(data-label); display: block; font-size: 0.65rem; text-transform: uppercase; color: #6b7280; margin-bottom: 4px; font-weight: 700; letter-spacing: 0.5px; }
+        .act1-card.dragging { opacity: 0.4; transform: scale(0.95); }
+        .act1-card.correct { background-color: #dcfce7 !important; border-color: #16a34a !important; color: #14532d !important; }
+        .act1-card.incorrect { background-color: #fee2e2 !important; border-color: #dc2626 !important; color: #7f1d1d !important; animation: shake 0.4s; }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-4px); } 75% { transform: translateX(4px); } }
+
+        /* --- ACTIVITÉ 2 (Rédaction) --- */
+        .act2-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(500px, 1fr)); gap: 2.5rem; }
+        .act2-step { display: flex; flex-direction: column; gap: 1.5rem; }
+        .act2-objective-box { background: rgba(255,255,255,0.4); padding: 0.8rem; border-radius: 4px; margin-bottom: 1rem; border-left: 3px solid #3b82f6; }
+        .act2-obj-label { font-size: 0.75rem; text-transform: uppercase; font-weight: 700; color: #1e40af; display: block; margin-bottom: 0.3rem; }
+        .act2-points-box ul { list-style-type: none; padding-left: 0; }
+        .act2-points-box li { position: relative; padding-left: 1.2rem; margin-bottom: 0.4rem; }
+        .act2-points-box li::before { content: '•'; color: #10b981; position: absolute; left: 0; font-weight: bold; }
+        .act2-input-card { background: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); display: flex; flex-direction: column; gap: 0.8rem; border: 1px solid #e5e7eb; }
+        .act2-input-header { display: flex; justify-content: space-between; align-items: center; }
+        .act2-input-label { font-weight: 600; color: #374151; font-size: 0.9rem; }
+        .act2-textarea { width: 100%; min-height: 200px; padding: 1rem; border: 1px solid #d1d5db; border-radius: 6px; font-family: 'Open Sans', sans-serif; font-size: 1rem; resize: vertical; background-color: #f9fafb; }
+        .act2-textarea:focus { outline: none; border-color: var(--primary-color); background-color: white; box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1); }
+
+        /* --- ACTIVITÉ 3 (Audio) --- */
+        .act3-controls { display: flex; gap: 0.8rem; flex-wrap: wrap; }
+        .act3-recorder-section { margin-top: 2rem; padding: 2rem; background: white; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); text-align: center; }
+        .act3-rec-title { margin-bottom: 1.5rem; font-size: 1.5rem; color: var(--act-header-bg); }
+        .act3-rec-ctrls { display: flex; justify-content: center; gap: 1.5rem; align-items: center; margin-bottom: 1.5rem; }
+        .act3-btn-record { background-color: var(--act-record-color); color: white; padding: 0.8rem 2rem; border-radius: 50px; display: flex; align-items: center; gap: 0.5rem; font-size: 1rem; box-shadow: 0 4px 6px rgba(220, 38, 38, 0.3); }
+        .act3-btn-record.recording { animation: pulse 1.5s infinite; background-color: #991b1b; }
+        .act3-timer { font-family: monospace; font-size: 1.5rem; font-weight: 700; color: #6b7280; min-width: 100px; }
+        .act3-tele { display: none; background-color: #f8fafc; border: 2px solid #e2e8f0; border-radius: 8px; padding: 1.5rem; margin-top: 1.5rem; max-height: 300px; overflow-y: auto; text-align: left; }
+        .act3-tele h3 { font-size: 1rem; color: #64748b; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 1rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.5rem; }
+        .act3-tele-text { font-family: 'Open Sans', sans-serif; font-size: 1.1rem; line-height: 1.8; color: #334155; white-space: pre-wrap; }
+        .act3-audio-container { max-width: 600px; margin: 20px auto 0; padding: 1rem; background: #f3f4f6; border-radius: 8px; display: none; }
+        .act3-audio-container audio { width: 100%; margin-top: 10px; }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+
+        /* --- ACTIVITÉ 4 (Non Verbal) --- */
+        #activity-4-wrapper {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: #0f172a; /* Dark mode override */
+            color: #f8fafc;
+            padding: 2rem;
+            border-radius: 12px;
+            min-height: 80vh;
+        }
+        /* Scoping specific styles for Act 4 inside wrapper */
+        #activity-4-wrapper .act4-main { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr; gap: 2rem; }
+        #activity-4-wrapper .act4-vid-section { display: flex; flex-direction: column; gap: 1.5rem; position: relative; }
+        #activity-4-wrapper .act4-vid-cont { background-color: #000; border-radius: 12px; overflow: hidden; position: relative; aspect-ratio: 16/9; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5); border: 1px solid rgba(255,255,255,0.1); }
+        #activity-4-wrapper video { width: 100%; height: 100%; object-fit: cover; display: block; }
+        #activity-4-wrapper #liveVideo-act4 { transform: scaleX(-1); }
+        #activity-4-wrapper .act4-overlay-status { position: absolute; top: 1rem; right: 1rem; display: flex; gap: 0.5rem; align-items: center; background: rgba(0,0,0,0.6); padding: 0.5rem 1rem; border-radius: 20px; font-size: 0.875rem; font-weight: 600; opacity: 0; transition: opacity 0.3s; pointer-events: none; }
+        #activity-4-wrapper .act4-overlay-status.visible { opacity: 1; }
+        #activity-4-wrapper .act4-rec-dot { width: 10px; height: 10px; background-color: #ef4444; border-radius: 50%; animation: pulse 1.5s infinite; }
+        #activity-4-wrapper #prepOverlay-act4 { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(8px); z-index: 50; display: flex; flex-direction: column; justify-content: center; align-items: center; border-radius: 12px; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
+        #activity-4-wrapper #prepOverlay-act4.active { opacity: 1; pointer-events: all; }
+        #activity-4-wrapper .act4-instr-text { font-size: 2rem; font-weight: 600; margin-bottom: 2rem; text-align: center; color: #fff; text-shadow: 0 2px 10px rgba(0,0,0,0.5); max-width: 80%; }
+        #activity-4-wrapper .act4-count-num { font-size: 8rem; font-weight: 800; color: #6366f1; line-height: 1; animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        @keyframes popIn { 0% { transform: scale(0.5); opacity: 0; } 80% { transform: scale(1.1); opacity: 1; } 100% { transform: scale(1); } }
+        #activity-4-wrapper .act4-tabs { display: flex; gap: 1rem; margin-bottom: 1rem; }
+        #activity-4-wrapper .act4-tab-btn { background: #1e293b; border: 1px solid rgba(255,255,255,0.1); color: #94a3b8; padding: 0.5rem 1.5rem; border-radius: 20px; cursor: pointer; transition: all 0.2s; font-weight: 500; }
+        #activity-4-wrapper .act4-tab-btn.active { background: #6366f1; color: white; border-color: #6366f1; }
+        #activity-4-wrapper .act4-controls { display: flex; gap: 1rem; flex-wrap: wrap; padding: 1.5rem; background: #1e293b; border-radius: 12px; align-items: center; justify-content: center; }
+        #activity-4-wrapper button { padding: 0.75rem 1.5rem; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: transform 0.1s, background-color 0.2s; display: flex; align-items: center; gap: 0.5rem; font-family: inherit; }
+        #activity-4-wrapper button:active { transform: scale(0.96); }
+        #activity-4-wrapper .btn-record { background-color: #ef4444; color: white; }
+        #activity-4-wrapper .btn-record.recording { background-color: #1e293b; border: 2px solid #ef4444; color: #ef4444; }
+        #activity-4-wrapper .btn-stop { background-color: #94a3b8; color: white; }
+        #activity-4-wrapper .btn-download { background-color: #22c55e; color: white; }
+        #activity-4-wrapper .btn-mute { background-color: #1e293b; border: 1px solid rgba(255,255,255,0.2); color: #f8fafc; }
+        #activity-4-wrapper .btn-mute.muted { background-color: #6366f1; border-color: #6366f1; }
+        #activity-4-wrapper .act4-inst-card { background: #1e293b; padding: 2rem; border-radius: 12px; border-left: 4px solid #6366f1; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.5); height: fit-content; }
+        #activity-4-wrapper .act4-inst-card h2 { font-size: 1.25rem; margin-bottom: 1rem; color: white; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.5rem; }
+        #activity-4-wrapper .act4-inst-card h3 { font-size: 1rem; color: #6366f1; margin-top: 1.5rem; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.05em; }
+        #activity-4-wrapper .act4-checklist { list-style: none; }
+        #activity-4-wrapper .act4-checklist li { position: relative; padding-left: 1.5rem; margin-bottom: 0.75rem; color: #94a3b8; font-size: 0.95rem; }
+        #activity-4-wrapper .act4-checklist li::before { content: "•"; color: #6366f1; position: absolute; left: 0; font-weight: bold; }
+        #activity-4-wrapper #act4-timer { font-variant-numeric: tabular-nums; font-size: 1.1rem; margin-left: auto; color: #f8fafc; }
+
+        /* RESPONSIVE */
+        @media (max-width: 900px) {
+            .main-content { padding: 2rem 1.5rem; }
+            .footer-actions { padding: 1rem; }
+            .act1-container { grid-template-columns: 1fr; }
+            .act1-board { order: 1; }
+            .act1-pool { order: 2; }
+            .act2-grid { grid-template-columns: 1fr; }
+            #activity-4-wrapper .act4-main { grid-template-columns: 1fr; }
+        }
+
+        /* PRINT (Cours Only - Pas les activités complexes sauf si demandé) */
+        @media print {
+            /* Impression du cours par défaut */
+            .footer-actions, #exercises-interface, .toast { display: none !important; }
+            .app-container, .main-content { display: block !important; width: 100% !important; max-width: 100% !important; margin: 0 !important; padding: 0 !important; }
+            body { background: white !important; color: black !important; }
+            h1, h2, h3, p, li { color: black !important; }
+            .hero, .obj-card, #conclusion > div, .comparison-table, .tabs-container, .step-list, .step-item { background: white !important; color: black !important; box-shadow: none !important; border: 1px solid black !important; margin: 5px 0 !important; }
+            .tab-content { display: block !important; border: 1px solid #ccc !important; padding: 5px !important; margin: 5px 0 !important; page-break-inside: avoid; }
+            .comparison-table { border: 1px solid black !important; width: 100% !important; }
+            .comparison-table th, .comparison-table td { border: 1px solid #000 !important; }
+            a { text-decoration: none !important; color: black !important; }
+            section { display: block !important; page-break-before: auto; }
+            h1 { page-break-after: avoid; }
+
+            /* Impression spécifique pour l'activité 1 (Fiche Résumé) */
+            body.printing-act1 #main-course,
+            body.printing-act1 .footer-actions,
+            body.printing-act1 #exercises-interface { display: none !important; }
+            
+            #print-sheet-act1 { display: block !important; }
+            
+            #print-sheet-act1 h1 {
+                text-align: center; margin-bottom: 20px; color: #000; font-size: 18pt; border-bottom: 2px solid #000; padding-bottom: 10px;
+            }
+            #print-sheet-act1 .ps-section {
+                page-break-inside: avoid;
+                border-bottom: 1px solid #eee;
+                padding-bottom: 10px;
+                margin-bottom: 15px;
+            }
+            #print-sheet-act1 .ps-title {
+                color: #d97706; /* Couleur Post-it */
+                font-weight: bold;
+                font-size: 12pt;
+                margin-bottom: 5px;
+                text-transform: uppercase;
+            }
+            #print-sheet-act1 .ps-label {
+                text-transform: uppercase;
+                font-size: 9pt;
+                color: #666;
+                font-weight: bold;
+                margin-bottom: 2px;
+            }
+            #print-sheet-act1 div {
+                font-size: 10pt;
+                margin-bottom: 8px;
+                line-height: 1.3;
+            }
+            #print-sheet-act1 ul {
+                margin: 5px 0 0 15px; padding: 0; font-size: 10pt; line-height: 1.3;
+            }
+            #print-sheet-act1 li { margin-bottom: 2px; }
+
+            /* Impression spécifique pour l'activité 2 (Rédaction) */
+            body.printing-act2 #main-course,
+            body.printing-act2 .footer-actions,
+            body.printing-act2 #exercises-interface { display: none !important; }
+            
+            #print-sheet-act2 { display: block !important; }
+            
+            #print-sheet-act2 h1 {
+                text-align: center; margin-bottom: 20px; color: #000; font-size: 18pt; border-bottom: 2px solid #000; padding-bottom: 10px;
+            }
+            #print-sheet-act2 .ps-section {
+                page-break-inside: avoid;
+                border-bottom: 1px solid #eee;
+                padding-bottom: 10px;
+                margin-bottom: 15px;
+            }
+            #print-sheet-act2 .ps-title {
+                color: #d97706; /* Couleur Post-it */
+                font-weight: bold;
+                font-size: 12pt;
+                margin-bottom: 5px;
+                text-transform: uppercase;
+            }
+            #print-sheet-act2 .ps-label {
+                text-transform: uppercase;
+                font-size: 9pt;
+                color: #666;
+                font-weight: bold;
+                margin-bottom: 2px;
+            }
+            #print-sheet-act2 .ps-obj {
+                font-size: 10pt;
+                margin-bottom: 5px;
+                font-style: italic;
+            }
+            #print-sheet-act2 .ps-user-text {
+                font-family: 'Courier New', Courier, monospace; /* Police type machine à écrire */
+                background: #f9f9f9;
+                padding: 10px;
+                border: 1px solid #ddd;
+                font-size: 10pt;
+                line-height: 1.4;
+                white-space: pre-wrap;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- =========================================
+     CONTENU PRINCIPAL DU COURS
+     ========================================= -->
+<div class="app-container">
+    <main class="main-content" id="main-course">
+        <!-- HERO / INTRO -->
+        <header class="hero fade-in-section" id="intro">
+            <h1>L’importance d’une bonne présentation</h1>
+            <p>Module stratégique : Réussir sa réponse à "Présentez-vous"</p>
+            <br>
+            <p><strong>🎯 Objectifs pédagogiques</strong></p>
+            <div class="objectives-grid" style="margin-top: 1rem; color:black;">
+                <div class="obj-card" style="background: #ffffff; border: 1px solid #eee; color: black;">
+                    <strong>Comprendre la stratégie</strong>
+                    <p style="color: var(--text-light); font-size: 0.9rem;">Saisir pourquoi cette question ouvre la porte de l'entretien.</p>
+                </div>
+                <div class="obj-card" style="background: #ffffff; border: 1px solid #eee; color: black;">
+                    <strong>Structurer clairement</strong>
+                    <p style="color: var(--text-light); font-size: 0.9rem;">Apprendre à synthétiser son parcours.</p>
+                </div>
+                <div class="obj-card" style="background: #ffffff; border: 1px solid #eee; color: black;">
+                    <strong>Éviter les pièges</strong>
+                    <p style="color: var(--text-light); font-size: 0.9rem;">Identifier ce qui décrédibilise un candidat.</p>
+                </div>
+            </div>
+        </header>
+
+        <!-- SECTION 1 -->
+        <section class="fade-in-section" id="enjeux">
+            <h2>1. Pourquoi cette question est décisive ?</h2>
+            <p>La question “Présentez-vous” n’est pas une simple formalité. C’est le moment où le recruteur se fait une première idée du candidat, de sa maturité professionnelle et de sa capacité à communiquer.</p>
+            <div style="background: #eef2f7; padding: 1.5rem; border-left: 5px solid var(--primary-color); border-radius: 4px;">
+                <h4>🧠 Ce que le recruteur évalue réellement :</h4>
+                <ul>
+                    <li>La capacité à synthétiser un parcours complexe.</li>
+                    <li>La pertinence des éléments choisis par rapport au poste.</li>
+                    <li>La cohérence entre le discours et les besoins de l'entreprise.</li>
+                    <li>Le niveau de préparation (l'improvisation se voit vite).</li>
+                    <li>La confiance en soi et la gestion du stress initial.</li>
+                </ul>
+            </div>
+            <p style="margin-top: 1rem; font-style: italic; color: var(--accent-color);">👉 Une bonne présentation crée immédiatement un <strong>effet de halo positif</strong> qui influence tout le reste de l’entretien.</p>
+        </section>
+
+        <!-- SECTION 2 -->
+        <section class="fade-in-section" id="rh-stakes">
+            <h2>2. Les enjeux RH derrière cette question</h2>
+            <p>En tant qu’ancien RH, voici comment décoder la question. C'est un test de professionnalisme déguisé.</p>
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Ce que dit le candidat</th>
+                        <th>Ce que le recruteur comprend</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Présentation claire et structurée</td>
+                        <td style="color: var(--success-color); font-weight: bold;">Capacité à communiquer efficacement</td>
+                    </tr>
+                    <tr>
+                        <td>Mise en avant des éléments pertinents</td>
+                        <td style="color: var(--success-color); font-weight: bold;">Intelligence professionnelle</td>
+                    </tr>
+                    <tr>
+                        <td>Ton calme et posé</td>
+                        <td style="color: var(--success-color); font-weight: bold;">Maîtrise de soi, fiabilité</td>
+                    </tr>
+                    <tr>
+                        <td>Discours cohérent avec le poste</td>
+                        <td style="color: var(--success-color); font-weight: bold;">Compréhension du métier</td>
+                    </tr>
+                    <tr>
+                        <td>Réponse trop longue ou floue</td>
+                        <td style="color: var(--danger-color);">Manque de recul, désorganisation</td>
+                    </tr>
+                    <tr>
+                        <td>Justifications ou excuses</td>
+                        <td style="color: var(--danger-color);">Fragilité professionnelle</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- SECTION 3 -->
+        <section class="fade-in-section" id="dimensions">
+            <h2>3. Les 3 dimensions d’une bonne présentation</h2>
+            <p>Réussir son pitch demande de travailler sur trois niveaux simultanés.</p>
+            <div class="tabs-container">
+                <div class="tabs-header">
+                    <button class="tab-btn active" onclick="openTab(event, 'fond')">🧠 Le Fond</button>
+                    <button class="tab-btn" onclick="openTab(event, 'forme')">🗣️ La Forme</button>
+                    <button class="tab-btn" onclick="openTab(event, 'nonverbal')">🤝 Le Non-Verbal</button>
+                </div>
+                <div id="fond" class="tab-content active">
+                    <h3>Ce que vous dites</h3>
+                    <p>Une bonne réponse doit être :</p>
+                    <ul>
+                        <li><strong>Ciblée :</strong> adaptée spécifiquement au poste.</li>
+                        <li><strong>Sélective :</strong> on ne raconte pas toute sa vie, seulement le pertinent.</li>
+                        <li><strong>Professionnelle :</strong> centrée sur compétences, expériences, résultats.</li>
+                        <li><strong>Orientée valeur :</strong> ce que vous apportez à l'entreprise.</li>
+                    </ul>
+                    <div style="background: #fff8e1; padding: 1rem; border-radius: var(--radius); margin-top: 1rem;">
+                        <strong>Structure recommandée (Simple) :</strong>
+                        <ol style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                            <li>Qui je suis (profil, métier, expérience globale).</li>
+                            <li>Ce que j’ai fait (réalisations clés, compétences).</li>
+                            <li>Ce que je veux apporter (motivation + valeur pour le poste).</li>
+                        </ol>
+                    </div>
+                </div>
+                <div id="forme" class="tab-content">
+                    <h3>Comment vous le dites</h3>
+                    <p>Le recruteur observe la qualité de l'expression orale.</p>
+                    <ul>
+                        <li><strong>Le rythme :</strong> Ni robotique, ni précipité.</li>
+                        <li><strong>La clarté :</strong> Phrases courtes, vocabulaire précis.</li>
+                        <li><strong>Le vocabulaire :</strong> Utilisez les mots-clés du métier (jargon professionnel adapté).</li>
+                        <li><strong>La capacité à aller à l’essentiel :</strong> Faire des phrases courtes.</li>
+                    </ul>
+                    <p style="margin-top: 1rem;">👉 Une réponse maîtrisée montre que vous savez vous présenter à un client ou un manager.</p>
+                </div>
+                <div id="nonverbal" class="tab-content">
+                    <h3>Ce que vous montrez</h3>
+                    <p>Le non-verbal peut crédibiliser ou détruire un discours parfait.</p>
+                    <ul>
+                        <li><strong>Regard :</strong> Stable, soutenu (mais fixe).</li>
+                        <li><strong>Sourire :</strong> Léger, bienveillant.</li>
+                        <li><strong>Posture :</strong> Ouverte, pas avachie ni croisée.</li>
+                        <li><strong>Respiration :</strong> Calme pour contrôler le stress.</li>
+                        <li><strong>Gestuelle :</strong> Maîtrisée, pour appuyer les points clés.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 4 -->
+        <section class="fade-in-section" id="erreurs">
+            <h2>4. Les erreurs les plus fréquentes</h2>
+            <p>Le recruteur doit comprendre en 60 à 90 secondes pourquoi vous êtes un bon candidat. Voici ce qu'il faut éviter absolument :</p>
+            <div class="badges-list">
+                <div class="badge">❌ Raconter sa vie depuis l’enfance</div>
+                <div class="badge">❌ Liste chronologique interminable</div>
+                <div class="badge">❌ Lire un texte appris par cœur</div>
+                <div class="badge">❌ Parler trop vite (stress)</div>
+                <div class="badge">❌ Se dévaloriser ("je ne sais pas si...")</div>
+                <div class="badge">❌ Être trop vague ("j'aime le travail en équipe")</div>
+                <div class="badge">❌ Ne pas faire le lien avec le poste</div>
+            </div>
+        </section>
+
+        <!-- SECTION 5 -->
+        <section class="fade-in-section" id="construction">
+            <h2>5. Comment construire une réponse impactante ?</h2>
+            <div class="step-list">
+                <div class="step-item">
+                    <h4>Étape 1 : Identifier les éléments pertinents</h4>
+                    <p>Faites une analyse du poste et de votre CV :</p>
+                    <ul>
+                        <li>Compétences clés demandées.</li>
+                        <li>Expériences les plus proches du besoin.</li>
+                        <li>Résultats mesurables (chiffres, faits).</li>
+                        <li>Vos 3 forces principales pour ce rôle.</li>
+                    </ul>
+                </div>
+                <div class="step-item">
+                    <h4>Étape 2 : Construire un pitch clair</h4>
+                    <p>Utilisez la structure suivante :</p>
+                    <ul>
+                        <li><em>Profil :</em> "Je suis [Nom], avec [X] années d’expérience dans [Domaine]..."</li>
+                        <li><em>Expertise :</em> "J’ai développé des compétences solides en [Compétence 1] et [Compétence 2]..."</li>
+                        <li><em>Réalisations :</em> "Par exemple, j'ai mené à bien [Projet] ce qui a permis [Résultat]..."</li>
+                        <li><em>Objectif :</em> "Aujourd’hui, je souhaite apporter mon expertise à [Entreprise] pour..."</li>
+                    </ul>
+                </div>
+                <div class="step-item">
+                    <h4>Étape 3 : S’entraîner à l’oral</h4>
+                    <p>L'écrit et l'oral sont différents.</p>
+                    <ul>
+                        <li>Répéter devant un miroir.</li>
+                        <li>Se filmer (très efficace pour voir les tics).</li>
+                        <li>Chronométrer : L'idéal est entre <strong>1 min et 1 min 30</strong>.</li>
+                        <li>Ajuster le ton et le rythme.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- CONCLUSION -->
+        <section class="fade-in-section" id="conclusion">
+            <div>
+                <h2>Conclusion</h2>
+                <p>
+                    La question “Présentez-vous” est un moment stratégique qui révèle votre capacité à communiquer, 
+                    votre compréhension du poste et votre maturité professionnelle.
+                </p>
+                <p style="margin-top: 1rem; font-weight: bold;">
+                    Une bonne présentation n’est pas un discours parfait, mais un message clair, 
+                    cohérent et orienté valeur.
+                </p>
+            </div>
+        </section>
+        <br><br><br>
+    </main>
+
+    <!-- =========================================
+         INTERFACE DES ACTIVITÉS (4 EXERCICES)
+         ========================================= -->
+    <div id="exercises-interface">
+        <button onclick="backToCourse()" class="ex-back-btn">← Retour au cours</button>
+        
+        <!-- Navigation entre les 4 activités -->
+        <div class="ex-nav">
+            <button onclick="switchActivity(1)" id="btn-act1" class="active">1. Structure</button>
+            <button onclick="switchActivity(2)" id="btn-act2">2. Rédaction</button>
+            <button onclick="switchActivity(3)" id="btn-act3">3. Audio</button>
+            <button onclick="switchActivity(4)" id="btn-act4">4. Non-Verbal</button>
+        </div>
+
+        <!-- ACTIVITÉ 1 : STRUCTURE (Drag & Drop) -->
+        <div id="activity-1" class="activity-wrapper active">
+            <div style="text-align:center; margin-bottom:2rem;">
+                <h1 style="font-family:'Montserrat', sans-serif;">Atelier "Présentez-vous"</h1>
+                <div style="display:flex; justify-content:center; gap:0.8rem;">
+                    <button class="btn-info" onclick="showConsigne1()">Consigne</button>
+                    <button class="btn-reset" onclick="resetAct1()">Réinitialiser</button>
+                    <button class="btn-check" onclick="verifyAct1()">Vérifier</button>
+                    <button class="btn-pdf" onclick="exportPDF_Act1()">Exporter PDF</button>
+                </div>
+            </div>
+            <div class="act1-container">
+                <div class="act1-pool">
+                    <div class="act1-header" style="color: var(--act-pt-color); border-color: var(--act-pt-color);">Points à aborder</div>
+                    <div id="pool-act1-left" class="act1-drop" ondrop="drop(event, 1)" ondragover="allowDrop(event)"></div>
+                </div>
+                <div class="act1-board" id="board-act1"></div>
+                <div class="act1-pool">
+                    <div class="act1-header" style="color: var(--act-obj-color); border-color: var(--act-obj-color);">Objectifs</div>
+                    <div id="pool-act1-right" class="act1-drop" ondrop="drop(event, 1)" ondragover="allowDrop(event)"></div>
+                </div>
+            </div>
+            <!-- Modale Consigne Act 1 -->
+            <div id="modal-consigne1" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); justify-content:center; align-items:center; z-index:1000;">
+                <div style="background:white; padding:2.5rem; border-radius:12px; max-width:600px; width:90%;">
+                    <h2 style="margin-bottom:1rem; color:var(--act-header-bg);">Consigne de l'activité</h2>
+                    <p style="margin-bottom:1rem; font-size:1.05rem;">Bienvenue. L'objectif est de structurer votre réponse parfaite.</p>
+                    <p style="font-weight:bold;">Disposition :</p>
+                    <ul style="margin-left:1.5rem; margin-bottom:1.5rem;">
+                        <li>À <strong>gauche</strong> : Les points détaillés à aborder.</li>
+                        <li>À <strong>droite</strong> : Les objectifs de chaque section.</li>
+                        <li>Au <strong>centre</strong> : Vos 6 Post-its à remplir.</li>
+                    </ul>
+                    <p style="font-weight:bold;">Tâche :</p>
+                    <ul style="margin-left:1.5rem; margin-bottom:1.5rem;">
+                        <li>Glissez les cartes depuis les colonnes latérales vers le Post-it correspondant.</li>
+                        <li>Chaque Post-it doit recevoir son "Objectif" (Bleu) et ses "Points à aborder" (Vert).</li>
+                    </ul>
+                    <button class="btn-info" style="background:var(--act-header-bg); width:100%; padding:1rem;" onclick="document.getElementById('modal-consigne1').style.display='none'">Compris</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ACTIVITÉ 2 : RÉDACTION -->
+        <div id="activity-2" class="activity-wrapper">
+            <div style="text-align:center; margin-bottom:2rem;">
+                <h1 style="font-family:'Montserrat', sans-serif;">Rédaction "Présentez-vous"</h1>
+                <div style="display:flex; justify-content:center; gap:0.8rem;">
+                    <button class="btn-info" onclick="showConsigne2()">Consigne</button>
+                    <button class="btn-reset" onclick="resetAct2()">Tout effacer</button>
+                    <button class="btn-check" onclick="checkAct2()">Vérifier</button>
+                    <button class="btn-pdf" onclick="exportPDF_Act2()">Exporter PDF</button>
+                </div>
+            </div>
+            <div class="act2-grid" id="board-act2"></div>
+            <!-- Modale Consigne Act 2 -->
+            <div id="modal-consigne2" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); justify-content:center; align-items:center; z-index:1000;">
+                <div style="background:white; padding:2.5rem; border-radius:12px; max-width:600px; width:90%;">
+                    <h2 style="margin-bottom:1rem; color:var(--act-header-bg);">Consigne de l'activité</h2>
+                    <p style="margin-bottom:1rem;">Bienvenue dans l'atelier de rédaction. Ici, pas de quiz, mais de la préparation concrète.</p>
+                    <p style="font-weight:bold;">Votre mission :</p>
+                    <ul style="margin-left:1.5rem; margin-bottom:1rem;">
+                        <li>Lisez attentivement le contenu de chaque Post-it (Objectifs et Points clés).</li>
+                        <li>Utilisez ces conseils pour rédiger votre propre texte dans la zone blanche située en dessous.</li>
+                        <li>Soyez précis et personnel. Le champ est assez grand pour développer vos idées.</li>
+                    </ul>
+                    <button class="btn-info" style="background:var(--act-header-bg); width:100%; padding:1rem;" onclick="document.getElementById('modal-consigne2').style.display='none'">Compris</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ACTIVITÉ 3 : AUDIO -->
+        <div id="activity-3" class="activity-wrapper">
+            <div style="text-align:center; margin-bottom:2rem;">
+                <h1 style="font-family:'Montserrat', sans-serif;">Atelier "Présentez-vous"</h1>
+                <div class="act3-controls">
+                    <button class="btn-info" onclick="showConsigne3()">Consigne</button>
+                    <button class="btn-generate" onclick="generatePresentation3()">Synthétiser le texte</button>
+                    <button class="btn-reset" onclick="resetAct3()">Tout effacer</button>
+                    <button class="btn-check" onclick="checkAct3()">Vérifier</button>
+                </div>
+            </div>
+            <div class="act2-grid" id="board-act3"></div>
+            <div class="act3-recorder-section">
+                <h2 class="act3-rec-title">Enregistrez votre présentation</h2>
+                <div class="act3-rec-ctrls">
+                    <div class="act3-timer" id="timer-act3">00:00</div>
+                    <button id="btn-record-act3" class="act3-btn-record" onclick="toggleRecording3()">
+                        <span id="record-icon-act3">🎙️</span> <span id="record-text-act3">Commencer l'enregistrement</span>
+                    </button>
+                </div>
+                <div id="teleprompter-act3" class="act3-tele">
+                    <h3>Votre texte à lire (Prompteur)</h3>
+                    <div id="teleprompter-text-act3" class="act3-tele-text"></div>
+                </div>
+                <div id="audio-container-act3" class="act3-audio-container">
+                    <h3>Votre enregistrement</h3>
+                    <audio id="audio-playback-act3" controls></audio>
+                    <div style="margin-top:10px;">
+                        <a id="download-link-act3" style="color:var(--primary-color); text-decoration:none; font-weight:600;" href="#" download="ma_presentation.webm">⬇ Télécharger l'audio</a>
+                    </div>
+                </div>
+            </div>
+            <!-- Modales Act 3 -->
+            <div id="modal-consigne3" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); justify-content:center; align-items:center; z-index:1000;">
+                <div style="background:white; padding:2rem; border-radius:12px; max-width:600px; width:90%; display:flex; flex-direction:column; gap:1rem;">
+                    <h2 style="margin-bottom:1rem; color:var(--act-header-bg);">Consigne</h2>
+                    <p>1. Rédigez votre présentation section par section.</p>
+                    <p>2. Cliquez sur "Synthétiser le texte" pour voir le discours complet.</p>
+                    <p>3. Cliquez sur "Commencer l'enregistrement" : le texte apparaîtra pour vous guider pendant l'enregistrement.</p>
+                    <button class="btn-info" style="width:100%; margin-top:1rem;" onclick="document.getElementById('modal-consigne3').style.display='none'">Compris</button>
+                </div>
+            </div>
+            <div id="modal-text-act3" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); justify-content:center; align-items:center; z-index:1000;">
+                <div style="background:white; padding:2rem; border-radius:12px; max-width:600px; width:90%; display:flex; flex-direction:column; gap:1rem;">
+                    <h2>Votre présentation complète</h2>
+                    <div class="generated-text" id="full-presentation-text-act3" style="background:#f9fafb; border:1px solid #e5e7eb; padding:1.5rem; border-radius:8px; max-height:60vh; overflow-y:auto; white-space:pre-wrap;"></div>
+                    <div style="display:flex; justify-content:flex-end; gap:1rem; margin-top:1rem;">
+                        <button class="btn-info" onclick="document.getElementById('modal-text-act3').style.display='none'">Fermer</button>
+                        <button class="btn-generate" onclick="copyToClipboard3()">Copier le texte</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ACTIVITÉ 4 : NON VERBAL -->
+        <div id="activity-4" class="activity-wrapper">
+            <div id="activity-4-wrapper">
+                <div style="background:rgba(15, 23, 42, 0.95); border-bottom:1px solid rgba(255,255,255,0.1); padding:1rem 2rem; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:100;">
+                    <h1 style="font-family:'Montserrat', sans-serif; font-size:1.5rem; margin:0; background:linear-gradient(90deg, #818cf8, #c084fc); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">SelfView <span style="font-weight:300; font-size:0.8em; color:#94a3b8;">Analyse Non Verbale</span></h1>
+                    <div id="act4-timer">00:00</div>
+                </div>
+                <div class="act4-main">
+                    <section class="act4-vid-section">
+                        <div class="act4-tabs">
+                            <button id="tabLive-act4" class="act4-tab-btn active" onclick="switchTabAct4('live')">Caméra en direct</button>
+                            <button id="tabPlayback-act4" class="act4-tab-btn" onclick="switchTabAct4('playback')">Vidéo enregistrée</button>
+                        </div>
+                        
+                        <!-- CONTAINER LIVE (CAMERA) -->
+                        <div id="containerLive-act4" class="act4-vid-cont">
+                            <video id="liveVideo-act4" autoplay muted playsinline></video>
+                            
+                            <!-- Overlay pour Compte à rebours & Instructions -->
+                            <div id="prepOverlay-act4">
+                                <div class="act4-instr-text" id="overlayText-act4">Pouvez-vous vous présenter ?</div>
+                                <div class="act4-count-num" id="countdownValue-act4"></div>
+                            </div>
+
+                            <div class="act4-overlay-status" id="recordingStatus-act4">
+                                <div class="act4-rec-dot"></div><span>Enregistrement</span>
+                            </div>
+                        </div>
+
+                        <!-- CONTAINER PLAYBACK (VIDEO RECORDED) -->
+                        <div id="containerPlayback-act4" class="act4-vid-cont" style="display:none;">
+                            <video id="playbackVideo-act4" controls playsinline></video>
+                        </div>
+
+                        <div class="act4-controls">
+                            <!-- Contrôles pour le mode LIVE -->
+                            <div id="controlsLive-act4" style="display:contents;">
+                                <button id="btnRecord-act4" class="btn-record" onclick="initiateRecordingSequenceAct4()">
+                                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                                    Enregistrer
+                                </button>
+                            </div>
+
+                            <!-- Contrôles pour le mode PLAYBACK -->
+                            <div id="controlsPlayback-act4" style="display:none; gap:1rem;">
+                                <button id="btnMute-act4" class="btn-mute" onclick="toggleMuteAct4()">
+                                    <svg id="iconMute-act4" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" clip-rule="evenodd"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2"/></svg>
+                                    <span id="txtMute-act4">Couper le son</span>
+                                </button>
+                                <a id="downloadLink-act4" style="text-decoration:none;">
+                                    <button class="btn-download">
+                                        <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                                        Télécharger
+                                    </button>
+                                </a>
+                                <button class="btn-record" onclick="deleteRecordingAct4()">
+                                     <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                     Supprimer
+                                </button>
+                            </div>
+                        </div>
+                    </section>
+                    <aside class="act4-inst-card">
+                        <h2>Analyse Non Verbale</h2>
+                        <h3>Objectif</h3>
+                        <p style="margin-bottom:1rem; color:#f8fafc;">Prendre conscience de son image.</p>
+                        <h3>Consigne</h3>
+                        <p style="margin-bottom:1rem; color:#f8fafc;">Filmez votre présentation. Regardez la vidéo <strong>en coupant le son</strong> pour analyser uniquement :</p>
+                        <ul class="act4-checklist">
+                            <li><strong>Le regard :</strong> Fuyant ou fixe ?</li>
+                            <li><strong>La posture :</strong> Droite ? Avachie ?</li>
+                            <li><strong>Les tics :</strong> Jouer avec ses cheveux, un stylo ?</li>
+                            <li><strong>La fluidité :</strong> Mouvements saccadés ou fluides ?</li>
+                        </ul>
+                    </aside>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <footer class="footer-actions no-print">
+        <button class="btn btn-secondary" onclick="showActivities()">
+            <span>🎮</span> Activité
+        </button>
+        <button class="btn btn-primary" onclick="downloadPDF()">
+            <span>📄</span> Télécharger en PDF
+        </button>
+    </footer>
+</div>
+
+<!-- TOAST NOTIFICATION -->
+<div id="toast" class="toast">Message</div>
+
+<script>
+    /* =========================================
+     LOGIQUE DU COURS PRINCIPAL
+     ========================================= */
+    function openTab(evt, tabName) {
+        var tabContent = document.getElementsByClassName("tab-content");
+        for (var i = 0; i < tabContent.length; i++) {
+            tabContent[i].style.display = "none";
+            tabContent[i].classList.remove("active");
+        }
+        var tabLinks = document.getElementsByClassName("tab-btn");
+        for (var i = 0; i < tabLinks.length; i++) {
+            tabLinks[i].className = tabLinks[i].className.replace(" active", "");
+        }
+        document.getElementById(tabName).style.display = "block";
+        document.getElementById(tabName).classList.add("active");
+        evt.currentTarget.className += " active";
+    }
+
+    function downloadPDF() { window.print(); }
+
+    function showActivities() {
+        document.querySelector('.main-content').style.display = 'none';
+        document.querySelector('.footer-actions').style.display = 'none';
+        document.getElementById('exercises-interface').style.display = 'block';
+        // Init par défaut l'activité 1 si pas déjà fait
+        initAct1();
+        window.scrollTo(0,0);
+    }
+
+    function backToCourse() {
+        document.getElementById('exercises-interface').style.display = 'none';
+        document.querySelector('.main-content').style.display = 'block';
+        document.querySelector('.footer-actions').style.display = 'flex';
+        window.scrollTo(0,0);
+    }
+
+    function switchActivity(id) {
+        // Boutons
+        document.querySelectorAll('.ex-nav button').forEach(b => b.classList.remove('active'));
+        document.getElementById('btn-act'+id).classList.add('active');
+        
+        // Contenus
+        document.querySelectorAll('.activity-wrapper').forEach(w => w.classList.remove('active'));
+        document.getElementById('activity-'+id).classList.add('active');
+
+        // Initialisation spécifique
+        if(id===1) initAct1();
+        if(id===2) initAct2();
+        if(id===3) { initAct3(); showConsigne3(); }
+        if(id===4) { initAct4(); }
+    }
+
+    /* =========================================
+     LOGIQUE ACTIVITÉ 1 (STRUCTURE)
+     ========================================= */
+    const gameData1 = [
+        { id: 1, title: "1. Accroche courte et identité professionnelle", objective: "Donner immédiatement une image claire de qui vous êtes aujourd’hui.", points: ["Votre métier / rôle actuel ou récent", "Votre niveau d’expérience", "Votre spécialité ou valeur ajoutée"] },
+        { id: 2, title: "2. Parcours résumé en 3 points clés", objective: "Montrer un fil conducteur cohérent, sans raconter toute votre vie.", points: ["2 à 3 étapes significatives", "Ce que vous avez appris ou développé", "Ce qui vous a amené logiquement au poste visé"] },
+        { id: 3, title: "3. Vos compétences fortes (ciblées pour le poste)", objective: "Rassurer immédiatement sur votre capacité à être opérationnel.", points: ["2 compétences techniques essentielles", "1 compétence comportementale différenciante", "Illustrées par un mini‑exemple ou résultat concret"] },
+        { id: 4, title: "4. Votre motivation spécifique pour le poste", objective: "Montrer que vous n’êtes pas là par hasard.", points: ["Ce qui vous attire dans le poste", "Ce que vous comprenez des enjeux", "Le lien avec votre parcours ou vos valeurs"] },
+        { id: 5, title: "5. Ce que vous apporterez à l’entreprise", objective: "Vous projeter dans le rôle et montrer votre valeur ajoutée.", points: ["Votre contribution immédiate", "Votre vision à moyen terme", "Votre manière de travailler"] },
+        { id: 6, title: "6. Une phrase de clôture simple et professionnelle", objective: "Terminer avec assurance et ouverture.", points: ["Montrer que vous êtes prêt à poursuivre l’échange", "Rester naturel"] }
+    ];
+
+    let draggedItem1 = null;
+
+    function initAct1() {
+        const poolLeft = document.getElementById('pool-act1-left');
+        const poolRight = document.getElementById('pool-act1-right');
+        const board = document.getElementById('board-act1');
+        if(board.children.length > 0) return; // Déjà initialisé
+
+        poolLeft.innerHTML = ''; poolRight.innerHTML = ''; board.innerHTML = '';
+        
+        gameData1.forEach(section => {
+            const postIt = document.createElement('div');
+            postIt.className = 'post-it';
+            const rotation = (Math.random() * 2 - 1).toFixed(1) + 'deg'; 
+            postIt.style.setProperty('--rotation', rotation);
+            postIt.innerHTML = `<div class="post-it-title">${section.title}</div><div class="act1-drop" id="zone-1-${section.id}" ondrop="drop(event, 1)" ondragover="allowDrop(event)"></div>`;
+            board.appendChild(postIt);
+        });
+
+        let cardsPoints = [];
+        let cardsObjectives = [];
+        gameData1.forEach(section => {
+            cardsObjectives.push({ id: `obj-1-${section.id}`, text: section.objective, type: 'objective', target: section.id, label: 'Objectif' });
+            section.points.forEach((point, index) => {
+                cardsPoints.push({ id: `pt-1-${section.id}-${index}`, text: point, type: 'point', target: section.id, label: 'Point clé' });
+            });
+        });
+
+        cardsPoints.sort(() => Math.random() - 0.5);
+        cardsObjectives.sort(() => Math.random() - 0.5);
+
+        const createCardEl = (cardData) => {
+            const el = document.createElement('div');
+            el.className = 'act1-card';
+            el.draggable = true; el.id = cardData.id; el.textContent = cardData.text;
+            el.dataset.type = cardData.type; el.dataset.target = cardData.target; el.dataset.label = cardData.label;
+            el.addEventListener('dragstart', dragStart1);
+            el.addEventListener('dragend', dragEnd1);
+            el.addEventListener('touchstart', handleTouchStart1, {passive:false});
+            el.addEventListener('touchmove', handleTouchMove1, {passive:false});
+            el.addEventListener('touchend', handleTouchEnd1);
+            return el;
+        };
+
+        cardsPoints.forEach(c => poolLeft.appendChild(createCardEl(c)));
+        cardsObjectives.forEach(c => poolRight.appendChild(createCardEl(c)));
+    }
+
+    function dragStart1(e) { draggedItem1 = this; setTimeout(() => this.classList.add('dragging'), 0); }
+    function dragEnd1(e) { this.classList.remove('dragging'); draggedItem1 = null; document.querySelectorAll('.drag-over').forEach(el => el.classList.remove('drag-over')); }
+    function allowDrop(e) {
+        e.preventDefault();
+        const dropZone = e.target.closest('.act1-drop') || e.target.closest('.act1-pool');
+        if (dropZone) dropZone.classList.add('drag-over');
+    }
+    function drop(e, actId) {
+        e.preventDefault();
+        document.querySelectorAll('.drag-over').forEach(el => el.classList.remove('drag-over'));
+        const dropTarget = e.target.closest('.act1-drop') || e.target.closest('.act1-pool');
+        if (dropTarget && draggedItem1) dropTarget.appendChild(draggedItem1);
+    }
+
+    let touchDraggedItem1 = null; let touchClone1 = null; let touchOffsetX1 = 0; let touchOffsetY1 = 0;
+    function handleTouchStart1(e) {
+        touchDraggedItem1 = this;
+        const touch = e.touches[0]; const rect = this.getBoundingClientRect();
+        touchOffsetX1 = touch.clientX - rect.left; touchOffsetY1 = touch.clientY - rect.top;
+        touchClone1 = this.cloneNode(true);
+        touchClone1.style.position = 'fixed'; touchClone1.style.width = rect.width + 'px'; touchClone1.style.zIndex = '1000';
+        touchClone1.style.opacity = '0.9'; touchClone1.style.boxShadow = '0 10px 20px rgba(0,0,0,0.2)';
+        touchClone1.style.pointerEvents = 'none'; document.body.appendChild(touchClone1);
+        moveClone1(touch.clientX, touch.clientY); this.style.opacity = '0.3'; e.preventDefault();
+    }
+    function handleTouchMove1(e) { if(!touchClone1) return; const touch = e.touches[0]; moveClone1(touch.clientX, touch.clientY); e.preventDefault(); }
+    function moveClone1(x, y) { touchClone1.style.left = (x - touchOffsetX1) + 'px'; touchClone1.style.top = (y - touchOffsetY1) + 'px'; }
+    function handleTouchEnd1(e) {
+        if(!touchClone1) return; touchClone1.style.display = 'none';
+        const changedTouch = e.changedTouches[0];
+        const elemBelow = document.elementFromPoint(changedTouch.clientX, changedTouch.clientY);
+        const dropTarget = elemBelow ? (elemBelow.closest('.act1-drop') || elemBelow.closest('.act1-pool')) : null;
+        if (dropTarget && touchDraggedItem1) { dropTarget.appendChild(touchDraggedItem1); }
+        touchDraggedItem1.style.opacity = '1'; if(touchClone1.parentNode) document.body.removeChild(touchClone1);
+        touchDraggedItem1 = null; touchClone1 = null;
+    }
+
+    function showConsigne1() { document.getElementById('modal-consigne1').style.display = 'flex'; }
+    function resetAct1() { if(confirm("Voulez-vous vraiment recommencer l'activité ?")) { document.getElementById('pool-act1-left').innerHTML=''; document.getElementById('pool-act1-right').innerHTML=''; document.getElementById('board-act1').innerHTML=''; initAct1(); showToast("Activité réinitialisée"); }}
+    function verifyAct1() {
+        let score = 0; let total = 0; const allCards = document.querySelectorAll('.act1-card');
+        allCards.forEach(card => {
+            card.classList.remove('correct', 'incorrect');
+            const cardTarget = card.dataset.target; const parentId = card.parentElement.id;
+            if (parentId === `zone-1-${cardTarget}`) { card.classList.add('correct'); score++; }
+            else if (parentId.startsWith('zone-1-')) { card.classList.add('incorrect'); }
+            total++;
+        });
+        const percentage = Math.round((score / total) * 100);
+        let message = `Score : ${score}/${total} (${percentage}%)`;
+        if (percentage === 100) message += " - Structure parfaite !";
+        else if (percentage >= 70) message += " - Bon travail.";
+        else message += " - Quelques ajustements nécessaires.";
+        showToast(message);
+    }
+
+    /* FONCTION EXPORT PDF ACTIVITÉ 1 */
+    function exportPDF_Act1() {
+        const container = document.createElement('div');
+        container.id = 'print-sheet-act1';
+        container.style.display = 'none'; 
+        
+        let htmlContent = '<h1 style="text-align:center; margin-bottom: 20px;">Résumé : Structure "Présentez-vous"</h1>';
+
+        gameData1.forEach(section => {
+            htmlContent += `
+                <div class="ps-section">
+                    <div class="ps-title">${section.title}</div>
+                    <div class="ps-label">Objectif</div>
+                    <div style="margin-bottom: 8px;">${section.objective}</div>
+                    <div class="ps-label">Points à aborder</div>
+                    <ul>
+                        ${section.points.map(pt => `<li>${pt}</li>`).join('')}
+                    </ul>
+                </div>
+            `;
+        });
+        
+        container.innerHTML = htmlContent;
+        document.body.appendChild(container);
+        document.body.classList.add('printing-act1');
+        window.print();
+        setTimeout(() => {
+            document.body.removeChild(container);
+            document.body.classList.remove('printing-act1');
+        }, 1000);
+    }
+
+    /* =========================================
+     LOGIQUE ACTIVITÉ 2 (RÉDACTION)
+     ========================================= */
+    const gameData2 = [
+        { id: 1, title: "1. Accroche courte et identité professionnelle", objective: "Donner immédiatement une image claire de qui vous êtes aujourd’hui.", points: ["Votre métier / rôle actuel ou récent", "Votre niveau d’expérience", "Votre spécialité ou valeur ajoutée"] },
+        { id: 2, title: "2. Parcours résumé en 3 points clés", objective: "Montrer un fil conducteur cohérent, sans raconter toute votre vie.", points: ["2 à 3 étapes significatives", "Ce que vous avez appris ou développé", "Ce qui vous a amené logiquement au poste visé"] },
+        { id: 3, title: "3. Vos compétences fortes (ciblées pour le poste)", objective: "Rassurer immédiatement sur votre capacité à être opérationnel.", points: ["2 compétences techniques essentielles", "1 compétence comportementale différenciante", "Illustrées par un mini‑exemple ou résultat concret"] },
+        { id: 4, title: "4. Votre motivation spécifique pour le poste", objective: "Montrer que vous n’êtes pas là par hasard.", points: ["Ce qui vous attire dans le poste", "Ce que vous comprenez des enjeux", "Le lien avec votre parcours ou vos valeurs"] },
+        { id: 5, title: "5. Ce que vous apporterez à l’entreprise", objective: "Vous projeter dans le rôle et montrer votre valeur ajoutée.", points: ["Votre contribution immédiate", "Votre vision à moyen terme", "Votre manière de travailler"] },
+        { id: 6, title: "6. Une phrase de clôture simple et professionnelle", objective: "Terminer avec assurance et ouverture.", points: ["Montrer que vous êtes prêt à poursuivre l’échange", "Rester naturel"] }
+    ];
+
+    function initAct2() {
+        const board = document.getElementById('board-act2');
+        if(board.children.length > 0) return;
+        board.innerHTML = '';
+        gameData2.forEach(section => {
+            const container = document.createElement('div');
+            container.className = 'act2-step';
+            const rotation = (Math.random() * 2 - 1).toFixed(1) + 'deg'; 
+            container.innerHTML = `
+                <div class="post-it" style="--rotation: ${rotation}">
+                    <div class="post-it-title">${section.title}</div>
+                    <div class="post-it-content">
+                        <div class="act2-objective-box"><span class="act2-obj-label">Objectif</span>${section.objective}</div>
+                        <div class="act2-points-box"><span class="act2-obj-label" style="color:#059669">Points à aborder</span><ul>${section.points.map(pt => `<li>${pt}</li>`).join('')}</ul></div>
+                    </div>
+                </div>
+                <div class="act2-input-card">
+                    <div class="act2-input-header"><span class="act2-input-label">Votre rédaction pour cette partie :</span><button class="btn-clear" onclick="clearSingleInput('area-2-${section.id}')">Effacer</button></div>
+                    <textarea id="area-2-${section.id}" class="act2-textarea" placeholder="Rédigez ici votre proposition..."></textarea>
+                </div>`;
+            board.appendChild(container);
+        });
+    }
+    function clearSingleInput(id) {
+        const area = document.getElementById(id);
+        if(area && area.value.trim() !== "") { if(confirm("Voulez-vous vraiment effacer le contenu de cette zone ?")) { area.value = ""; showToast("Zone effacée"); } }
+    }
+    function resetAct2() { if(confirm("Voulez-vous vraiment effacer TOUTES vos rédactions ?")) { document.querySelectorAll('.act2-textarea').forEach(t => t.value = ""); showToast("Tout a été effacé"); } }
+    function checkAct2() {
+        const textareas = document.querySelectorAll('.act2-textarea'); let filledCount = 0; let totalCount = textareas.length;
+        textareas.forEach(t => { if(t.value.trim().length > 20) filledCount++; });
+        let msg = (filledCount === totalCount) ? "Excellent ! Toutes les sections sont remplies." : (filledCount === 0) ? "Vous n'avez pas encore commencé la rédaction." : `Progression : ${filledCount}/${totalCount} sections remplies.`;
+        showToast(msg);
+    }
+    function showConsigne2() { document.getElementById('modal-consigne2').style.display = 'flex'; }
+
+    /* FONCTION EXPORT PDF ACTIVITÉ 2 (NOUVEAU) */
+    function exportPDF_Act2() {
+        const container = document.createElement('div');
+        container.id = 'print-sheet-act2';
+        container.style.display = 'none'; 
+
+        let htmlContent = '<h1 style="text-align:center; margin-bottom: 20px;">Votre Travail de Rédaction</h1>';
+
+        gameData2.forEach(section => {
+            const userText = document.getElementById(`area-2-${section.id}`).value.trim();
+            const content = userText ? userText : "<em>(Non rédigé)</em>";
+
+            htmlContent += `
+                <div class="ps-section">
+                    <div class="ps-title">${section.title}</div>
+                    <div class="ps-label">Objectif</div>
+                    <div class="ps-obj">${section.objective}</div>
+                    <div class="ps-label">Votre texte</div>
+                    <div class="ps-user-text">${content}</div>
+                </div>
+            `;
+        });
+        
+        container.innerHTML = htmlContent;
+        document.body.appendChild(container);
+        document.body.classList.add('printing-act2');
+        window.print();
+        setTimeout(() => {
+            document.body.removeChild(container);
+            document.body.classList.remove('printing-act2');
+        }, 1000);
+    }
+
+    /* =========================================
+     LOGIQUE ACTIVITÉ 3 (AUDIO)
+     ========================================= */
+    const gameData3 = [
+        { id: 1, title: "1. Accroche courte et identité professionnelle", objective: "Donner immédiatement une image claire de qui vous êtes aujourd’hui.", points: ["Votre métier / rôle actuel ou récent", "Votre niveau d’expérience", "Votre spécialité ou valeur ajoutée"] },
+        { id: 2, title: "2. Parcours résumé en 3 points clés", objective: "Montrer un fil conducteur cohérent, sans raconter toute votre vie.", points: ["2 à 3 étapes significatives", "Ce que vous avez appris ou développé", "Ce qui vous a amené logiquement au poste visé"] },
+        { id: 3, title: "3. Vos compétences fortes (ciblées pour le poste)", objective: "Rassurer immédiatement sur votre capacité à être opérationnel.", points: ["2 compétences techniques essentielles", "1 compétence comportementale différenciante", "Illustrées par un mini‑exemple ou résultat concret"] },
+        { id: 4, title: "4. Votre motivation spécifique pour le poste", objective: "Montrer que vous n’êtes pas là par hasard.", points: ["Ce qui vous attire dans le poste", "Ce que vous comprenez des enjeux", "Le lien avec votre parcours ou vos valeurs"] },
+        { id: 5, title: "5. Ce que vous apporterez à l’entreprise", objective: "Vous projeter dans le rôle et montrer votre valeur ajoutée.", points: ["Votre contribution immédiate", "Votre vision à moyen terme", "Votre manière de travailler"] },
+        { id: 6, title: "6. Une phrase de clôture simple et professionnelle", objective: "Terminer avec assurance et ouverture.", points: ["Montrer que vous êtes prêt à poursuivre l’échange", "Rester naturel"] }
+    ];
+
+    function initAct3() {
+        const board = document.getElementById('board-act3');
+        if(board.children.length > 0) return;
+        board.innerHTML = '';
+        gameData3.forEach(section => {
+            const container = document.createElement('div');
+            container.className = 'act2-step'; 
+            const rotation = (Math.random() * 2 - 1).toFixed(1) + 'deg'; 
+            container.innerHTML = `
+                <div class="post-it" style="--rotation: ${rotation}">
+                    <div class="post-it-title">${section.title}</div>
+                    <div class="post-it-content">
+                        <div class="act2-objective-box"><span class="act2-obj-label">Objectif</span>${section.objective}</div>
+                        <div class="act2-points-box"><span class="act2-obj-label" style="color:#059669">Points à aborder</span><ul>${section.points.map(pt => `<li>${pt}</li>`).join('')}</ul></div>
+                    </div>
+                </div>
+                <div class="act2-input-card">
+                    <div class="act2-input-header"><span class="act2-input-label">Votre texte :</span><button class="btn-clear" onclick="clearSingleInput('area-3-${section.id}')">Effacer</button></div>
+                    <textarea id="area-3-${section.id}" class="act2-textarea" placeholder="Rédigez ici..."></textarea>
+                </div>`;
+            board.appendChild(container);
+        });
+    }
+
+    function getFullTextContent3() {
+        let fullText = ""; let isEmpty = true;
+        gameData3.forEach(section => {
+            const val = document.getElementById(`area-3-${section.id}`).value.trim();
+            if(val) { fullText += `[${section.title}]\n\n${val}\n\n`; isEmpty = false; }
+        });
+        if (isEmpty) return "Aucun texte rédigé pour le moment.";
+        return fullText;
+    }
+
+    function generatePresentation3() {
+        const fullText = getFullTextContent3();
+        if (fullText === "Aucun texte rédigé pour le moment.") { showToast("Rédigez d'abord du contenu dans les zones ci-dessus !"); return; }
+        document.getElementById('full-presentation-text-act3').textContent = fullText;
+        document.getElementById('modal-text-act3').style.display = 'flex';
+    }
+    function copyToClipboard3() { navigator.clipboard.writeText(document.getElementById('full-presentation-text-act3').textContent).then(() => showToast("Texte copié !")); }
+
+    let mediaRecorder3, audioChunks3, recordStartTime3, timerInterval3, isRecording3 = false;
+    async function toggleRecording3() {
+        if(!isRecording3) await startRecording3(); else stopRecording3();
+    }
+
+    async function startRecording3() {
+        const textToShow = getFullTextContent3();
+        document.getElementById('teleprompter-text-act3').textContent = textToShow;
+        document.getElementById('teleprompter-act3').style.display = 'block';
+
+        if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) { showToast("Votre navigateur ne supporte pas l'enregistrement audio."); return; }
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            mediaRecorder3 = new MediaRecorder(stream); audioChunks3 = [];
+            mediaRecorder3.ondataavailable = e => audioChunks3.push(e.data);
+            mediaRecorder3.onstop = () => {
+                const audioBlob = new Blob(audioChunks3, { type: 'audio/webm' });
+                const audioUrl = URL.createObjectURL(audioBlob);
+                document.getElementById('audio-playback-act3').src = audioUrl;
+                document.getElementById('download-link-act3').href = audioUrl;
+                document.getElementById('download-link-act3').download = `presentation_${new Date().toISOString().slice(0,19).replace(/:/g,"-")}.webm`;
+                document.getElementById('audio-container-act3').style.display = 'block';
+            };
+            mediaRecorder3.start(); isRecording3 = true;
+            const btn = document.getElementById('btn-record-act3'); btn.classList.add('recording');
+            document.getElementById('record-text-act3').textContent = "Arrêter l'enregistrement"; document.getElementById('record-icon-act3').textContent = "⏹";
+            recordStartTime3 = Date.now(); timerInterval3 = setInterval(updateTimer3, 1000);
+            document.getElementById('audio-container-act3').style.display = 'none';
+        } catch (err) { showToast("Erreur : Accès au micro refusé."); }
+    }
+    function stopRecording3() {
+        if(mediaRecorder3 && mediaRecorder3.state !== 'inactive') {
+            mediaRecorder3.stop(); mediaRecorder3.stream.getTracks().forEach(track => track.stop());
+        }
+        isRecording3 = false; clearInterval(timerInterval3);
+        const btn = document.getElementById('btn-record-act3'); btn.classList.remove('recording');
+        document.getElementById('record-text-act3').textContent = "Réenregistrer"; document.getElementById('record-icon-act3').textContent = "🎙️";
+    }
+    function updateTimer3() {
+        const diff = Math.floor((Date.now() - recordStartTime3) / 1000);
+        const m = Math.floor(diff / 60).toString().padStart(2, '0');
+        const s = (diff % 60).toString().padStart(2, '0');
+        document.getElementById('timer-act3').textContent = `${m}:${s}`;
+    }
+    function resetAct3() { if(confirm("Tout effacer ?")) { document.querySelectorAll('#board-act3 textarea').forEach(t => t.value = ""); document.getElementById('audio-container-act3').style.display = 'none'; document.getElementById('teleprompter-act3').style.display = 'none'; document.getElementById('timer-act3').textContent = "00:00"; showToast("Réinitialisation complète"); } }
+    function checkAct3() { const count = Array.from(document.querySelectorAll('#board-act3 textarea')).filter(t => t.value.trim().length > 20).length; showToast(`Progression : ${count}/6 sections remplies`); }
+    function showConsigne3() { document.getElementById('modal-consigne3').style.display = 'flex'; }
+
+    /* =========================================
+     LOGIQUE ACTIVITÉ 4 (NON VERBAL)
+     ========================================= */
+    let mediaStream4, mediaRecorder4, recordedChunks4, timerInterval4, seconds4 = 0, synth4 = window.speechSynthesis, bestFrenchVoice4 = null;
+
+    function loadVoices4() {
+        const voices = synth4.getVoices();
+        bestFrenchVoice4 = voices.find(v => v.lang.includes('fr') && (v.name.includes('Google') || v.name.includes('Microsoft'))) || voices.find(v => v.lang.includes('fr'));
+    }
+    if(speechSynthesis.onvoiceschanged !== undefined) speechSynthesis.onvoiceschanged = loadVoices4;
+
+    async function initCamera4() {
+        try {
+            mediaStream4 = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+            document.getElementById('liveVideo-act4').srcObject = mediaStream4;
+        } catch (err) { showToast("Erreur caméra"); console.error(err); }
+    }
+    function initAct4() { initCamera4(); loadVoices4(); }
+
+    // FONCTION DE COMPTE À REBOURS MODIFIÉE ET OPTIMISÉE
+    function runCountdownAct4() {
+        return new Promise(resolve => {
+            let count = 3;
+            const countDisplay = document.getElementById('countdownValue-act4');
+            const textDisplay = document.getElementById('overlayText-act4');
+            
+            // Cacher le texte instruction avant le compte à rebours
+            textDisplay.style.display = 'none';
+            countDisplay.textContent = count;
+            countDisplay.style.display = 'block';
+
+            const interval = setInterval(() => {
+                count--;
+                if(count > 0) {
+                    countDisplay.textContent = count;
+                } else {
+                    clearInterval(interval);
+                    countDisplay.textContent = ""; // Effacer le dernier chiffre
+                    textDisplay.style.display = 'block'; // Réafficher le texte par défaut si besoin (ou laisser vide)
+                    textDisplay.textContent = ""; 
+                    resolve();
+                }
+            }, 1000);
+        });
+    }
+
+    async function initiateRecordingSequenceAct4() {
+        if(mediaRecorder4 && mediaRecorder4.state === 'recording') { 
+            stopRecordingAct4(); 
+            return; 
+        }
+        
+        const btnRecord = document.getElementById('btnRecord-act4');
+        btnRecord.disabled = true;
+
+        // 1. Afficher l'overlay
+        const overlay = document.getElementById('prepOverlay-act4');
+        overlay.classList.add('active');
+
+        // 2. Préparer les éléments textuels
+        const textDisplay = document.getElementById('overlayText-act4');
+        const countDisplay = document.getElementById('countdownValue-act4');
+        textDisplay.textContent = "Pouvez-vous vous présenter ?";
+        textDisplay.style.display = 'block';
+        countDisplay.textContent = "";
+        countDisplay.style.display = 'none';
+
+        // 3. Prononcer la phrase (Synthèse vocale)
+        const utterance = new SpeechSynthesisUtterance("Pouvez-vous vous présenter ?");
+        utterance.lang = 'fr-FR'; 
+        utterance.rate = 0.9; 
+        utterance.pitch = 1; 
+        if(bestFrenchVoice4) utterance.voice = bestFrenchVoice4;
+
+        // On crée une Promise pour attendre la fin de la parole
+        const speechPromise = new Promise(resolve => { 
+            utterance.onend = resolve; 
+            utterance.onerror = resolve; // Resolve même en cas d'erreur pour ne pas bloquer
+            synth4.speak(utterance); 
+        });
+
+        await speechPromise;
+        
+        // Petite pause après la parole avant le compte à rebours
+        await new Promise(r => setTimeout(r, 800)); 
+        
+        // 4. Lancer le compte à rebours 3-2-1
+        await runCountdownAct4();
+
+        // 5. Cacher l'overlay et démarrer l'enregistrement
+        overlay.classList.remove('active');
+        btnRecord.disabled = false;
+        
+        startRecordingAct4();
+    }
+
+    function startRecordingAct4() {
+        recordedChunks4 = [];
+        try {
+            mediaRecorder4 = new MediaRecorder(mediaStream4);
+        } catch(e) {
+            showToast("Erreur init recorder");
+            return;
+        }
+
+        mediaRecorder4.ondataavailable = e => {
+            if (e.data.size > 0) recordedChunks4.push(e.data);
+        };
+
+        mediaRecorder4.onstop = () => {
+            // Création du Blob de la vidéo
+            const recordedBlob = new Blob(recordedChunks4, { type: 'video/webm' });
+            const videoURL = URL.createObjectURL(recordedBlob);
+            
+            // 1. Assigner la source à l'élément vidéo de playback
+            const playbackVideo = document.getElementById('playbackVideo-act4');
+            playbackVideo.src = videoURL;
+            playbackVideo.load(); // Force le chargement
+            
+            // 2. Mettre à jour le lien de téléchargement
+            const downloadLink = document.getElementById('downloadLink-act4');
+            downloadLink.href = videoURL;
+            downloadLink.download = `analyse-${new Date().toISOString().slice(0,10)}.webm`;
+            
+            // 3. Basculer automatiquement vers l'onglet de lecture pour que l'utilisateur puisse voir sa vidéo
+            // C'est ici qu'on répond à "revisionner sans télécharger"
+            switchTabAct4('playback');
+        };
+        
+        mediaRecorder4.start();
+        
+        // UI Updates
+        const btn = document.getElementById('btnRecord-act4'); 
+        btn.classList.add('recording');
+        btn.innerHTML = `<div style="width:10px; height:10px; background:white; border-radius:50%;"></div> Arrêter`;
+        document.getElementById('recordingStatus-act4').classList.add('visible');
+        
+        startTimerAct4();
+    }
+
+    function stopRecordingAct4() {
+        if(mediaRecorder4 && mediaRecorder4.state !== 'inactive') {
+            mediaRecorder4.stop();
+            // On ne stop pas les tracks ici pour garder la caméra allumée pour une ré-éventuelle prise
+        }
+        const btn = document.getElementById('btnRecord-act4'); 
+        btn.classList.remove('recording');
+        btn.innerHTML = `<svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg> Enregistrer`;
+        document.getElementById('recordingStatus-act4').classList.remove('visible'); 
+        stopTimerAct4();
+    }
+
+    function startTimerAct4() { 
+        seconds4 = 0; 
+        clearInterval(timerInterval4);
+        timerInterval4 = setInterval(() => { 
+            seconds4++; 
+            const m = Math.floor(seconds4 / 60).toString().padStart(2,'0'); 
+            const s = (seconds4 % 60).toString().padStart(2,'0'); 
+            document.getElementById('act4-timer').textContent = `${m}:${s}`; 
+        }, 1000); 
+    }
+    
+    function stopTimerAct4() { clearInterval(timerInterval4); }
+
+    function switchTabAct4(tab) {
+        const cLive = document.getElementById('containerLive-act4'); 
+        const cPlay = document.getElementById('containerPlayback-act4');
+        const tLive = document.getElementById('tabLive-act4'); 
+        const tPlay = document.getElementById('tabPlayback-act4'); 
+        const ctrlsLive = document.getElementById('controlsLive-act4'); 
+        const ctrlsPlay = document.getElementById('controlsPlayback-act4');
+        
+        const pbVideo = document.getElementById('playbackVideo-act4');
+
+        if(tab === 'live') { 
+            cLive.style.display = 'block'; 
+            cPlay.style.display = 'none'; 
+            ctrlsLive.style.display = 'contents'; 
+            ctrlsPlay.style.display = 'none'; 
+            tLive.classList.add('active'); 
+            tPlay.classList.remove('active'); 
+            pbVideo.pause(); 
+        } else { 
+            cLive.style.display = 'none'; 
+            cPlay.style.display = 'block'; 
+            ctrlsLive.style.display = 'none'; 
+            ctrlsPlay.style.display = 'flex'; 
+            tLive.classList.remove('active'); 
+            tPlay.classList.add('active'); 
+            // S'assurer que la vidéo est prête à être regardée
+            if(pbVideo.src) {
+                pbVideo.play().catch(e => console.log("Autoplay prevented, waiting for user interaction"));
+            }
+        }
+    }
+
+    function toggleMuteAct4() {
+        const pbVideo = document.getElementById('playbackVideo-act4'); 
+        const btnMute = document.getElementById('btnMute-act4'); 
+        const txt = document.getElementById('txtMute-act4'); 
+        const icon = document.getElementById('iconMute-act4');
+        if(pbVideo.muted) { 
+            pbVideo.muted = false; 
+            txt.textContent = "Couper le son"; 
+            btnMute.classList.remove('muted'); 
+            icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />'; 
+        } else { 
+            pbVideo.muted = true; 
+            txt.textContent = "Réactiver le son"; 
+            btnMute.classList.add('muted'); 
+            icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2" />'; 
+        }
+    }
+
+    function deleteRecordingAct4() { 
+        if(confirm("Supprimer la vidéo ?")) { 
+            document.getElementById('playbackVideo-act4').src = ""; 
+            document.getElementById('downloadLink-act4').href = ""; 
+            switchTabAct4('live'); 
+            showToast("Vidéo supprimée."); 
+        } 
+    }
+
+    /* =========================================
+     UTILITAIRES COMMUNS
+     ========================================= */
+    function showToast(msg) {
+        const t = document.getElementById("toast"); 
+        t.textContent = msg; t.className = "show";
+        setTimeout(function(){ t.className = t.className.replace("show", ""); }, 3000);
+    }
+</script>
+
+</body>
+</html>
